@@ -1,37 +1,15 @@
 require 'pry'
 def calculate_score(dice)
-  return 0 if dice == []
-  final_score = 0
-  dice.sort!
-
-  if dice[1] == dice[0] && dice[2] ==dice[0]
-    if dice[0] == 1
-      final_score += 1000
-    elsif dice[0] == 2
-      final_score += 200
-    elsif dice [0] == 3
-      final_score += 300
-    elsif dice[0] == 4
-      final_score += 400
-    elsif dice[0] == 5
-      final_score += 500
-    elsif dice[0] == 6
-      final_score += 600
+  triple_scores = [1000, 200, 300, 400, 500, 600]
+    single_scores = [100, 0, 0, 0, 50, 0]
+    score=0
+    (1..6).each do |number|
+      count = dice.count(number)
+      score += triple_scores[number - 1] * (count / 3)
+      score += single_scores[number - 1] * (count % 3)
+      #require 'pry';binding.pry
     end
-    3.times do dice.shift end
-  end
-  # binding.pry
-  dice.each do |item|
-    if item == 5
-      final_score += 50
-    elsif item == 1 
-      final_score += 100
-      # 2.times do dice.shift end 
-      
-    end
-  end
-  # p dice
-  final_score
+    score
 end   
 # p calculate_score([1,1,1,1,5])
 
