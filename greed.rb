@@ -3,7 +3,7 @@ def calculate_score(dice)
   triple_scores = [1000, 200, 300, 400, 500, 600]
   single_scores = [100, 0, 0, 0, 50, 0]
   score=0
-  non_scoring_count = 5
+  non_scoring_count = dice.length
   (1..6).each do |number|
     count = dice.count(number)
     score += triple_scores[number - 1] * (count / 3)
@@ -43,10 +43,32 @@ def turn(scores, player)
   roll = dice.values
 
   puts "The roll is: #{roll.inspect}"
-
+  
   temp = calculate_score(roll)
   score = temp[0]
-  non_scoring_dice = temp[1]
+  current_score = temp[0]
+  puts "score #{score}"
+  non_scoring_count = temp[1]
+  while non_scoring_count != 0 && current_score !=0
+    puts "Do you want to re-roll? the non scoring dice #{non_scoring_count} y/n"
+    choice = gets.chomp
+    if choice == "y"
+      
+      roll = DiceSet.new()
+      dice = roll.roll(non_scoring_count)
+      temp = calculate_score(dice)
+      non_scoring_count = temp[1]
+      score += temp[0]
+      current_score = temp[0]
+      p "dice of re-roll #{dice}"
+      p "score after re-roll #{score}"
+      
+      #binding.pry
+    else 
+      puts "Not re-rolling"
+      break
+    end
+  end
   puts "Score of #{player}: #{score}"
   scores[player] += score
   scores
