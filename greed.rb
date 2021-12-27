@@ -70,7 +70,7 @@ def turn(scores, player)
       break
     end
   end
-  puts "Score of #{player+1}: #{score}"
+  puts "Score of player#{player+1} in this round : #{score}"
   scores[player] += score
   scores
 end
@@ -108,7 +108,7 @@ while !did_anyone_win(scores)
   (0...n).each do |player|
     scores = turn(scores, player)
   end
-  puts "Scores: #{scores}"
+  puts "Total Scores: #{scores}"
   
   round += 1
   puts ""
@@ -131,7 +131,7 @@ puts "--------entering the final round--------"
     scores = turn(scores, player)
   end
 end
-puts "Scores: #{scores}"
+puts "Final Scores: #{scores}"
 
 playerid_havingMax_score= []
 def max_score(scores)
