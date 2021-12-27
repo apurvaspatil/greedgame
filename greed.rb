@@ -1,37 +1,23 @@
 require 'pry'
 def calculate_score(dice)
-  return 0 if dice == []
-  final_score = 0
-  dice.sort!
-
-  if dice[1] == dice[0] && dice[2] ==dice[0]
-    if dice[0] == 1
-      final_score += 1000
-    elsif dice[0] == 2
-      final_score += 200
-    elsif dice [0] == 3
-      final_score += 300
-    elsif dice[0] == 4
-      final_score += 400
-    elsif dice[0] == 5
-      final_score += 500
-    elsif dice[0] == 6
-      final_score += 600
+  triple_scores = [1000, 200, 300, 400, 500, 600]
+  single_scores = [100, 0, 0, 0, 50, 0]
+  score=0
+  non_scoring_count = dice.length
+  (1..6).each do |number|
+    count = dice.count(number)
+    score += triple_scores[number - 1] * (count / 3)
+    if (count / 3) >= 1
+      non_scoring_count -= 3
     end
-    3.times do dice.shift end
-  end
-  # binding.pry
-  dice.each do |item|
-    if item == 5
-      final_score += 50
-    elsif item == 1 
-      final_score += 100
-      # 2.times do dice.shift end 
-      
+    score += single_scores[number - 1] * (count % 3)
+    if number == 1 || number == 5 && count % 3 != 0
+      non_scoring_count -= count % 3
     end
+    #binding.pry
+    
   end
-  # p dice
-  final_score
+  return [score , non_scoring_count]
 end   
 # p calculate_score([1,1,1,1,5])
 
@@ -57,7 +43,32 @@ def turn(scores, player)
   roll = dice.values
 
   puts "The roll is: #{roll.inspect}"
-  score = calculate_score(roll)
+  
+  temp = calculate_score(roll)
+  score = temp[0]
+  current_score = temp[0]
+  puts "score #{score}"
+  non_scoring_count = temp[1]
+  while non_scoring_count != 0 && current_score !=0
+    puts "Do you want to re-roll? the non scoring dice #{non_scoring_count} y/n"
+    choice = gets.chomp
+    if choice == "y"
+      
+      roll = DiceSet.new()
+      dice = roll.roll(non_scoring_count)
+      temp = calculate_score(dice)
+      non_scoring_count = temp[1]
+      score += temp[0]
+      current_score = temp[0]
+      p "dice of re-roll #{dice}"
+      p "score after re-roll #{score}"
+      
+      #binding.pry
+    else 
+      puts "Not re-rolling"
+      break
+    end
+  end
   puts "Score of #{player}: #{score}"
   scores[player] += score
   scores
@@ -65,7 +76,7 @@ end
 
 # turn()
 
-
+puts "enter the number of players"
 n = gets.chomp.to_i
 
 scores = []
