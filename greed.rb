@@ -71,7 +71,14 @@ def turn(scores, player)
     end
   end
   puts "Score of player#{player+1} in this round : #{score}"
-  scores[player] += score
+  scores[player]+= score
+  #if eligibility[player] == true
+    
+    #scores[player] += score
+  #elsif  score >= 300
+    #eligibility[player] = true
+    #scores[player]+= score
+  #end
   scores
 end
 
@@ -81,9 +88,13 @@ puts "enter the number of players"
 n = gets.chomp.to_i
 
 scores = []
+#eligibility =[]
 (0...n).each do |i|
   scores.push(0)
+  #eligibility.push(false)
 end
+
+
 # scores=[0,0]
 # binding.pry
 # current_player = 0
@@ -156,5 +167,6 @@ playerid_havingMax_score.each do |player|
 end
 
   
+
 
 
