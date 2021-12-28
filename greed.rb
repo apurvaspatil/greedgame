@@ -36,7 +36,7 @@ class DiceSet
 end
 
 
-def turn(scores, player)
+def turn(scores, player,eligibility)
   puts "Player #{player+1} turn -----"
   dice = DiceSet.new()
   dice.roll(5)
@@ -71,8 +71,16 @@ def turn(scores, player)
     end
   end
   puts "Score of player#{player+1} in this round : #{score}"
-  scores[player]+= score
-  #if eligibility[player] == true
+  #scores[player]+= score
+  if eligibility[player] == false
+    if score >= 300
+      eligibility[player] = true
+    end 
+  end
+
+  if eligibility[player] == true
+    scores[player]+= score
+  end
     
     #scores[player] += score
   #elsif  score >= 300
@@ -88,10 +96,10 @@ puts "enter the number of players"
 n = gets.chomp.to_i
 
 scores = []
-#eligibility =[]
+eligibility =[]
 (0...n).each do |i|
   scores.push(0)
-  #eligibility.push(false)
+  eligibility.push(false)
 end
 
 
@@ -102,6 +110,7 @@ end
 round = 1
 
 def did_anyone_win(scores)
+  #binding.pry
   scores.each do |score|
     if score >= 3000
       return true
@@ -114,10 +123,10 @@ end
 
 
 while !did_anyone_win(scores)
-  
+  #binding.pry
   puts "Round #{round}"
   (0...n).each do |player|
-    scores = turn(scores, player)
+    scores = turn(scores, player,eligibility)
   end
   puts "Total Scores: #{scores}"
   
@@ -139,7 +148,7 @@ puts "--------entering the final round--------"
   
 (0...n).each do |player|
   if !player_who_reach3000.include?player
-    scores = turn(scores, player)
+    scores = turn(scores, player,eligibility)
   end
 end
 puts "Final Scores: #{scores}"
